@@ -19,7 +19,7 @@ io.on("connection", (socket) => {
   console.log("WebSocket connection");
 
   socket.emit("showMessage", welcomeMessage);
-  socket.broadcast.emit("showMessage", "A new user join!");
+  socket.broadcast.emit("showMessage", "A new user has  join!");
 
   socket.on("sendMessage", (messageClient) => {
     io.emit("showMessage", messageClient);
