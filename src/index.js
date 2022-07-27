@@ -18,11 +18,18 @@ let welcomeMessage = "Welcome";
 io.on("connection", (socket) => {
   console.log("WebSocket connection");
 
-  socket.emit("showMessage", welcomeMessage);
-  socket.broadcast.emit("showMessage", "A new user has  join!");
+  socket.emit("message", welcomeMessage);
+  socket.broadcast.emit("message", "A new user has  join!");
 
   socket.on("sendMessage", (messageClient) => {
-    io.emit("showMessage", messageClient);
+    io.emit("message", messageClient);
+  });
+  socket.on("sendLocation", (location) => {
+    io.emit("message", location);
+  });
+
+  socket.on("disconnect", () => {
+    io.emit("message", "A user has left!");
   });
 });
 

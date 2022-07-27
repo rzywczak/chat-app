@@ -1,10 +1,6 @@
 const socket = io();
 
-// socket.on('countUpdated', (count) => {
-//     console.log('The count has been updated', count)
-// })
-
-socket.on("showMessage", (messageClient) => {
+socket.on("message", (messageClient) => {
   console.log(messageClient);
 });
 
@@ -14,4 +10,16 @@ document.querySelector("#message-form").addEventListener("submit", (e) => {
   const message = e.target.elements.message.value;
 
   socket.emit("sendMessage", message);
+});
+
+document.querySelector("#send-location").addEventListener("click", () => {
+  if (!navigator.geolocation) {
+    return alert("Geolocation is not supported by yoru browser");
+  }
+  navigator.geolocation.getCurrentPosition((position) => {
+    const longitude = position.coords.longitude;
+    const latitude = position.coords.latitude;
+    const location = `https://google.com/maps?q=${latitude},${longitude}`;
+    socket.emit("sendLocation", location);
+  });
 });
