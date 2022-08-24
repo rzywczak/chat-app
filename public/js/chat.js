@@ -9,7 +9,12 @@ document.querySelector("#message-form").addEventListener("submit", (e) => {
 
   const message = e.target.elements.message.value;
 
-  socket.emit("sendMessage", message);
+  socket.emit("sendMessage", message, (error) => {
+    if (error) {
+      return console.log(error);
+    }
+    console.log("The message was delivered!");
+  });
 });
 
 document.querySelector("#send-location").addEventListener("click", () => {
@@ -20,6 +25,8 @@ document.querySelector("#send-location").addEventListener("click", () => {
     const longitude = position.coords.longitude;
     const latitude = position.coords.latitude;
     const location = `https://google.com/maps?q=${latitude},${longitude}`;
-    socket.emit("sendLocation", location);
+    socket.emit("sendLocation", location, () => {
+      console.log("Location shared!");
+    });
   });
 });
