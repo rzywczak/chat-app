@@ -20,8 +20,15 @@ let welcomeMessage = "Welcome";
 io.on("connection", (socket) => {
   console.log("WebSocket connection");
 
-  socket.emit("message", generateMessage(welcomeMessage))
-  socket.broadcast.emit("message", generateMessage("A new user has  join!"));
+
+
+  socket.on('join', ({ username, room})=>{
+    socket.join(room)
+    
+    socket.emit("message", generateMessage(welcomeMessage))
+    socket.broadcast.to(room).emit("message", generateMessage(`${username} has joined!`));
+
+  })
 
   socket.on("sendMessage", (messageClient, callback) => {
     const fillter = new Fillter();
@@ -41,6 +48,8 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     io.emit("message", generateMessage("A user has left!"));
   });
+
+
 });
 
 server.listen(port, () => {
